@@ -1,6 +1,5 @@
 package uom.niroshan.myreditapp.model;
 
-import jdk.internal.jline.internal.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,29 +12,27 @@ import java.time.Instant;
 import static javax.persistence.FetchType.LAZY;
 import static javax.persistence.GenerationType.IDENTITY;
 
-@Data//
+@Data
 @Entity
 @Builder
 @AllArgsConstructor
-public class Post {
+
+public class Subreddit {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    private Long postId;
-    @NotBlank(message = "Post Name Cannot be empty or Null")
-    private String postName;
-    @Nullable
-    private String url;
-    @Lob
+    private Long id;
+    @NotBlank(message = "Community Name is requered")
+    private String name;
+    @NotBlank(message = "Desription is required")
     private String description;
-    private Integer voteCount;
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name= "userId", referencedColumnName = "userId")
-    private User user;
+    @OneToMany(fetch = LAZY)
+    private List<Post> post;
     private Instant createdDate;
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "id", referencedColumnName = "id")
-    private Subredit subredit;
+    private User user;
+
+
 
 
 
