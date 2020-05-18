@@ -1,0 +1,42 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>Title</title>-->
+<!--</head>-->
+<!--<body>-->
+
+First Create all the Models with the help of Database Schema
+Then add the repositry package and design the basic repository extending JpaRepository
+Create Config Package => SecurityConfig class by extending WebSecurityadaptor and then overide the configure(HttpSecurity httpSecurity)
+in order to make do all authorization
+Then create the controller package and add the AuthController class by adding /signup post mapping and add the RegisterRequest as @Requestbody
+
+Then create the dto( Data transfer object that carries through the request body) That have the username email password
+
+Then create the authService class in Service packege to call from the Authcontroller. And in the authService we create the signup method to do the
+opertion with  database
+
+Then create mailTemplate.html to display the email for the user.
+
+After saving the user it is to be generate a token with the user details.
+
+then create the token in authService itself with the help of VerifcationToken class and save that created token using VerificationTokenRepository
+
+Now we Have created the token with the user details and what now wants to do is that we have to send an email to that perticular mail.
+
+So for that we create a service called MailService and in this service we create a method call sendMail
+== mailService.sendMail(new NotificationEmail(""Please Activate your Account",
+user.getEmail(), "Thank you for signing up to Spring Reddit, " +
+"please click on the below url to activate your account : " +
+"http://localhost:8080/api/auth/accountVerification/" + token")
+
+and then in the sendEmail method there are some configuration to do and code about the mail sending function with the help of javamail sender
+
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency> this dependency help in sending activation mail
+<!--</body>-->
+<!--</html>-->
