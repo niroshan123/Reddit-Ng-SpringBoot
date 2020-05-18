@@ -6,17 +6,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uom.niroshan.myreditapp.dto.RegisterRequest;
+import uom.niroshan.myreditapp.model.NotificationEmail;
 import uom.niroshan.myreditapp.model.User;
 import uom.niroshan.myreditapp.model.VerificationToken;
 import uom.niroshan.myreditapp.repository.UserRepository;
+import uom.niroshan.myreditapp.repository.VerificationTokenRepository;
 
 import java.time.Instant;
 import java.util.UUID;
-
-
-@AllArgsConstructor
+import java.util.Optional;
 
 @Service
+@AllArgsConstructor
+
+
 public class AuthService {
 
 //    @Autowired
@@ -26,27 +29,34 @@ public class AuthService {
 //    private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final   UserRepository userRepository;
-
+    private final VerificationTokenRepository verificationTokenRepository;
+    private final MailService mailService;
     @Transactional
-    public void signup(RegisterRequest registerRequest){
-        User user =new User();
+    public void signup(RegisterRequest registerRequest) {
+        User user = new User();
         user.setUsername(registerRequest.getUsername());
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setCreated(Instant.now());
         user.setEnabled(false);
+
         userRepository.save(user);
 
-        generateVerificationToken(user);
-
+        String token = generateVerificationToken(user);
+        mailService.sendMail(new NotificationEmail("Please Activate your Account",
+                user.getEmail(), "Thank you for signing up to Spring Reddit, " +
+                "please click on the below url to activate your account : " +
+                "http://localhost:8080/api/auth/accountVerification/" + token));
     }
 
-    public void generateVerificationToken(User user){
-        String token =UUID.randomUUID().toString();
+
+    private String generateVerificationToken(User user) {
+        String token = UUID.randomUUID().toString();
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setToken(token);
         verificationToken.setUser(user);
 
-
+        verificationTokenRepository.save(verificationToken);
+        return token;
     }
 }
