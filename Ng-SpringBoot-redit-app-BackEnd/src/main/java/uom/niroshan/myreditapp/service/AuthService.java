@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uom.niroshan.myreditapp.dto.RegisterRequest;
+import uom.niroshan.myreditapp.exception.SpringRedditException;
 import uom.niroshan.myreditapp.model.NotificationEmail;
 import uom.niroshan.myreditapp.model.User;
 import uom.niroshan.myreditapp.model.VerificationToken;
@@ -59,4 +60,19 @@ public class AuthService {
         verificationTokenRepository.save(verificationToken);
         return token;
     }
+
+    public void verifyAccount(String token) {
+        Optional<VerificationToken> verificationToken = verificationTokenRepository.findByToken(token);
+        fetchUserAndEnable(verificationToken.orElseThrow(() -> new SpringRedditException("Invalid Token")));
+    }
+
+    @Transactional
+    private void fetchUserAndEnable(VerificationToken verificationToken) {
+        String username = verificationToken.getUser().getUsername();
+        User user = userRepository.findByUsername(username).orElseThrow(()->new SpringRedditException("User Not Found"+ username ));
+        user.setEnabled(true);
+        userRepository.save(user);
+    }
+
+
 }

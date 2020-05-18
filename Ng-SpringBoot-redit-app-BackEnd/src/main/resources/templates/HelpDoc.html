@@ -5,6 +5,7 @@
 <!--    <title>Title</title>-->
 <!--</head>-->
 <!--<body>-->
+For Your Knowledge if you are reffering my repo :)
 
 First Create all the Models with the help of Database Schema
 Then add the repositry package and design the basic repository extending JpaRepository
@@ -20,6 +21,8 @@ opertion with  database
 Then create mailTemplate.html to display the email for the user.
 
 After saving the user it is to be generate a token with the user details.
+
+
 
 then create the token in authService itself with the help of VerifcationToken class and save that created token using VerificationTokenRepository
 
@@ -40,3 +43,18 @@ and then in the sendEmail method there are some configuration to do and code abo
 </dependency> this dependency help in sending activation mail
 <!--</body>-->
 <!--</html>-->
+
+===================User Verification Async process============
+create a GetMapping with accountVerification/{token} this is what we send to the email so this link is what we get as a get
+so authService.verifyAccount() we have to create a method verifyAccount to find the token in the verifyTokenRepository
+verifyAccount(token){
+Optional</VerificationToken> verificationToken=verificationTokenRepository.findByToken(token);
+since this is optional when there is no perticular token we can send a error msg
+if ther is a token then that token is sent to fetchandexe method to find whether there is a user with that user by getting the user name
+in the token by calling userrepository and storing in User user
+and if no user send the exception
+and if ther is a user then
+user.setEnabled(true);
+userRepository.save(user);
+
+finally  return new ResponseEntity<>("Account Activated", HttpStatus.OK); in AuthController GetMapping
