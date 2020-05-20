@@ -58,3 +58,8 @@ user.setEnabled(true);
 userRepository.save(user);
 
 finally  return new ResponseEntity<>("Account Activated", HttpStatus.OK); in AuthController GetMapping
+
+===================Login Functionality============
+AuthService to grab the authentication request and match with the user credentials then create UserNamePasswordAuthenticationToken
+this UserNamePasswordAuthenticationToken will pass to AuthenticationManager which taken care of all athentications this AuthenticationManager
+will use an interface called UserDetailService which we have to implement to chechk with database

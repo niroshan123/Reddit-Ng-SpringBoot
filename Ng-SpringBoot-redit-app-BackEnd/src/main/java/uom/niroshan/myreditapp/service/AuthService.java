@@ -1,10 +1,15 @@
 package uom.niroshan.myreditapp.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uom.niroshan.myreditapp.dto.AuthenticationResponse;
+import uom.niroshan.myreditapp.dto.LoginRequest;
 import uom.niroshan.myreditapp.dto.RegisterRequest;
 import uom.niroshan.myreditapp.exception.SpringRedditException;
 import uom.niroshan.myreditapp.model.NotificationEmail;
@@ -12,6 +17,7 @@ import uom.niroshan.myreditapp.model.User;
 import uom.niroshan.myreditapp.model.VerificationToken;
 import uom.niroshan.myreditapp.repository.UserRepository;
 import uom.niroshan.myreditapp.repository.VerificationTokenRepository;
+import uom.niroshan.myreditapp.security.JwtProvider;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -29,9 +35,12 @@ public class AuthService {
 //    @Autowired
 //    private UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final   UserRepository userRepository;
+    private final UserRepository userRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final MailService mailService;
+    private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
+
     @Transactional
     public void signup(RegisterRequest registerRequest) {
         User user = new User();
@@ -75,4 +84,15 @@ public class AuthService {
     }
 
 
+    public AuthenticationResponse login(LoginRequest loginRequest) {
+
+
+       Authentication authenticate =
+               authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
+                       loginRequest.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
+        String token = jwtProvider.generateToken(authenticate);
+        return new AuthenticationResponse(token, loginRequest.getUsername());
+
+    }
 }
