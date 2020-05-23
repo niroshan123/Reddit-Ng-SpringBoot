@@ -21,7 +21,7 @@ public class AuthController {
     public ResponseEntity<String> signup(@RequestBody RegisterRequest registerRequest) {
 
         authService.signup(registerRequest);
-        return new ResponseEntity<>("User Ragistration Success", HttpStatus.OK);
+        return new ResponseEntity<>("User Registration Success", HttpStatus.OK);
     }
 
     @GetMapping("/accountVerification/{token}")
@@ -34,6 +34,6 @@ public class AuthController {
     @PostMapping("/login")
     public AuthenticationResponse login(@RequestBody LoginRequest loginRequest){
         return authService.login(loginRequest);
-//        return new ResponseEntity<>("Successfully Loged in", HttpStatus.OK);
+//        return new ResponseEntity<>("Successfully Logged in", HttpStatus.OK);
     }
 }
