@@ -8,9 +8,12 @@ header{
 }
 
 .reddit-text{
-  font-weight: 700 ;
-  height: 50px;
-  width: 50px;
+  font-weight: 900 ;
+  height: 90px;
+  width: 90px;
+  font-size: 23px;
+  font-family: "Verdana";
+  color: midnightblue;
 }
 .logo{
   text-decoration: none;
@@ -94,4 +97,21 @@ header{
   margin-right: 5px;
   max-height: 24px;
   max-width: 24px;
+}
+.svg-icon {
+  width: 3em;
+  height: 3em;
+
+  fill:red;
+}
+
+.svg-icon path,
+.svg-icon polygon,
+.svg-icon rect {
+  fill: navy;
+}
+
+.svg-icon circle {
+  stroke: black;
+  stroke-width: 1;
 }
