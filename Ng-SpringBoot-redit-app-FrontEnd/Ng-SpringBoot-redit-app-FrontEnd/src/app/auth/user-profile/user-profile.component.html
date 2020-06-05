@@ -8,7 +8,9 @@
   <div>
     Your Posts:
   </div>
-  <app-post-tile [posts]="posts"></app-post-tile>
+  <div *ngFor="let post of posts">
+    <p>{{post.postName}}</p>
+  </div>
   <hr />
   <div>
     Your Comments:

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { PostModel } from './post-model';
 import { Observable } from 'rxjs';
 import { CreatePostPayload } from '../post/create-post/create-post.payload';
+import {CommentPayload} from "../comment/comment.payload";
 
 @Injectable({
   providedIn: 'root'
@@ -26,4 +27,5 @@ export class PostService {
   getAllPostsByUser(name: string): Observable<PostModel[]> {
     return this.http.get<PostModel[]>('http://localhost:8080/api/posts/by-user/' + name);
   }
+
 }
